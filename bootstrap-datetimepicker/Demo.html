@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- jquery and bootstrap -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="../jquery.min.js"></script>
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- bootstrap datetime picker -->
+    <link rel="stylesheet" href="bootstrap-datetimepicker.min.css" />
+    <script type="text/javascript" src="moment.min.js"></script>
+    <script type="text/javascript" src="bootstrap-datetimepicker.min.js"></script>
+</head>
+<body>
+<div class='input-group date' id='datetimepicker6'>
+    <input type='text' class="form-control" readonly="true"/>
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>
+
+<div class='input-group date' id='datetimepicker7'>
+    <input type='text' class="form-control" readonly="true"/>
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>
+
+<!-- <div class="container">
+    <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker6'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-5'>
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker7'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div> -->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker6').datetimepicker({
+            format: 'YYYY-MM-D HH:mm:ss',
+            ignoreReadonly: true
+        });
+        $('#datetimepicker7').datetimepicker({
+            format: 'YYYY-MM-D HH:mm:ss',
+            ignoreReadonly: true,
+            useCurrent: false //Important! See issue #1075
+        });
+
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+</script>
+</body>
+</html>
