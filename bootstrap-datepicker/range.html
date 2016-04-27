@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap</title>
+
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="bootstrap-datepicker/css/bootstrap-datepicker.css">
+
+        <script src="../jquery.min.js"></script>
+        <script src="../bootstrap/js/bootstrap.js"></script>
+        <script src="bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+        <style>
+        .input-group-addon {
+            border-width: 1px 0;
+        }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h1>Hello</h1>
+                    <div class="input-daterange input-group" id="datepicker">
+                        <input type="text" class="input-sm form-control" name="start"/>
+                        <span class="input-group-addon">到</span>
+                        <input type="text" class="input-sm form-control" name="end"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('.input-daterange').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            language: 'zh-CN',
+            todayHighlight: true
+        });
+    });
+
+    </script>
+</html>
