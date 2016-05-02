@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="string-format.js"></script>
+    <script>
+        console.log(formatString("I can speak {language} since I was {age}", {language: 'Javascript', age: 10}));
+        console.log(formatString("I can speak {0} since I was {1}",'Javascript', 10));
+
+        console.log('I can speak {language} since I was {age}'.format({language: 'Javascript', age: 10}));
+        console.log('I can speak {0} since I was {1}'.format('Javascript', 10));
+
+        console.log('Unreplaced {{id}}'.format(123));
+    </script>
+</head>
+<body>
+
+</body>
+</html>
