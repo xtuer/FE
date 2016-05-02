@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery 对元素拖动排序</title>
+    <style type="text/css">
+        #animals {
+            cursor: pointer;
+            width: 200px;
+        }
+
+        li {
+            /*float:left; */
+            display: block;  /*需要是 block 或者 float 的*/
+            list-style-type: none;
+            margin-top: 10px;
+        }
+
+        #animals li:hover {
+            background: #EEE;
+        }
+
+        #left {
+            float: left;
+        }
+
+        #right {
+            float: left;
+        }
+
+        #info li {
+            box-shadow: 0 0 2px #DDD;
+        }
+    </style>
+</head>
+<body>
+    <div id="content-wrap">
+        <div id="left">
+            <ul id="animals">
+                <li data-order="1">(☆_☆)</li>
+                <li data-order="2">凸^-^凸</li>
+                <li data-order="3">(^_−)−☆</li>
+                <li data-order="4">(◐‿◑)﻿
+                    <ul id="inner">
+                        <li data-order="21">(☆_☆)</li>
+                        <li data-order="22">凸^-^凸</li>
+                        <li data-order="23">(^_−)−☆</li>
+                        <li data-order="24">☆*:.｡. o(≧▽≦)o .｡.:*☆</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div id="right">
+            <ul id="info">
+                <li data-order="1">(☆_☆)</li>
+                <li data-order="2">凸^-^凸</li>
+                <li data-order="3">(^_−)−☆</li>
+                <li data-order="4">(◐‿◑)﻿</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../jquery.min.js"></script>
+	<script type="text/javascript" src="../jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // 启用拖拽排列操作
+            $("#animals").sortable({
+                opacity: 0.5,
+                update: function (event, ui) { // 拖拽完成后的回调函数，例如保存到数据库等
+                    var order = ui.item.attr('data-order'); // 被拖拽的元素: ui.item
+                    var preOrder = ui.item.prev().attr('data-order');
+
+                    if (preOrder) {
+                        $('#info li[data-order="' + order + '"]').insertAfter($('#info li[data-order="' + preOrder + '"]'));
+                    } else {
+                        $('#info').prepend($('#info li[data-order="' + order + '"]'));
+                    }
+
+                    regenerateOrder();
+                }
+            });
+            $("#inner").sortable();
+        });
+
+        // 重新生成 order
+        function regenerateOrder() {
+            var order = 1;
+            $('#animals > li').each(function() {
+                $(this).attr('data-order', order);
+                order++;
+            });
+
+            order = 1;
+            $('#info > li').each(function() {
+                $(this).attr('data-order', order);
+                order++;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+    #src, #dst {
+        border: 1px solid gray;
+        width: 400px;
+        height: 100px;
+        margin-top: 10px;
+    }
+    .item {
+        display: inline-block;
+        float: left;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        cursor: pointer;
+        line-height: 50px;
+        text-align: center;
+    }
+
+    .item-1 {
+        background: red;
+    }
+
+    .item-2 {
+        background: green;
+    }
+
+    .item-3 {
+        background: blue;
+    }
+
+    .item-4 {
+        background: yellow;
+    }
+
+    .ui-draggable-dragging {
+        opacity: 0.5;
+    }
+    </style>
+</head>
+<body>
+    <div id="src">
+        <div class="item item-1">1</div>
+        <div class="item item-2">2</div>
+        <div class="item item-3">3</div>
+        <div class="item item-4">4</div>
+    </div>
+    <div id="dst"></div>
+
+    <script src="../jquery.min.js"></script>
+    <script src="../jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.item').draggable({
+                helper : 'clone',
+                cursor: 'move',
+                revert: 'invalid' // 拖拽失败时漂回原来的位置
+            });
+        });
+
+        $('#dst').droppable({
+            drop: function(event, ui) {
+                $('#dst').append(ui.draggable);
+            }
+        });
+    </script>
+</body>
+</html>
