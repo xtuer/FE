@@ -59,12 +59,11 @@
                 cursor: 'move',
                 revert: 'invalid' // 拖拽失败时漂回原来的位置
             });
-        });
-
-        $('#dst').droppable({
-            drop: function(event, ui) {
-                $('#dst').append(ui.draggable);
-            }
+            $('#dst').droppable({
+                drop: function(event, ui) {
+                    $('#dst').append(ui.draggable);
+                }
+            });
         });
     </script>
 </body>
