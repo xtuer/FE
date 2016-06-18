@@ -11,7 +11,7 @@
 String.prototype.format = function(replacements) {
     replacements = (typeof replacements === 'object') ? replacements : Array.prototype.slice.call(arguments, 0);
     return formatString(this, replacements);
-}
+};
 
 /**
  * 替换字符串中 {placeholder} 或者 {0}, {1} 等模式部分为参数中传入的字符串
@@ -24,12 +24,18 @@ String.prototype.format = function(replacements) {
  * @param str 带有 placeholder 的字符串
  * @param replacements 用来替换 placeholder 的 JSON 对象或者数组
  */
-var formatString = function (str, replacements) {
+var formatString = function(str, replacements) {
     replacements = (typeof replacements === 'object') ? replacements : Array.prototype.slice.call(arguments, 1);
 
     return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function(m, n) {
-        if (m == '{{') { return '{'; }
-        if (m == '}}') { return '}'; }
+        if (m == '{{') {
+            return '{';
+        }
+
+        if (m == '}}') {
+            return '}';
+        }
+
         return replacements[n];
     });
 };
