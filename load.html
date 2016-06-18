@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title></title>
 </head>
+
 <body>
     <div id="xx">xxxx</div>
 
     <script src="jquery.min.js"></script>
     <script>
-    $(document).ready(function() {
-        var url = '/resource.xml'
+        $(document).ready(function() {
+            var url = '/resource.xml'
 
-        $('#xx').load(url, {}, function(response, status, xhr) {
-            console.log(response);
+            $('#xx').load(url, {}, function(response, status, xhr) {
+                console.log(response);
+            });
         });
-    });
     </script>
 </body>
+
 </html>
