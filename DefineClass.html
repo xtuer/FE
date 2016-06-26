@@ -1,62 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title></title>
 </head>
+
 <body>
-
     <script type="text/javascript">
-    /**
-    * 把字符串路径生成链式对象的命名空间。
-    *
-    * 使用命名空间，可以减少命名冲突，可以像下面这么做:
-    * var ns = ns || {};
-    * ns.ModuleClass = {};
-    *
-    * 但是如果名字太长，如 a.b.c.e.f.g.h，这样的方式定义命名空间需要太多代码，很麻烦。
-    **/
-    function namespace(qualifiedPath) {
-        var arr = qualifiedPath.split('.'), i = 0, name;
-        var root = window;
+        'use strict';
+        
+        /**
+         * 把字符串路径生成链式对象的命名空间。
+         *
+         * 使用命名空间，可以减少命名冲突，可以像下面这么做:
+         * var ns = ns || {};
+         * ns.ModuleClass = {};
+         *
+         * 但是如果名字太长，如 a.b.c.e.f.g.h，这样的方式定义命名空间需要太多代码，很麻烦。
+         **/
+        function namespace(qualifiedPath) {
+            var arr = qualifiedPath.split('.');
+            var i = 0;
+            var name;
+            var root = window;
 
-        while (name = arr[i++]) {
-            if (!root[name]) {
-                root[name] = {};
+            while (name = arr[i++]) {
+                if (!root[name]) {
+                    root[name] = {};
+                }
+
+                root = root[name];
             }
-            root = root[name];
+
+            return root;
         }
-        return root;
-    }
     </script>
 
     <script>
-    namespace("com.tur.util"); // 生成命名空间 com.tur.util
+        'use strict';
+        namespace('com.xtuer.util'); // 生成命名空间 com.xtuer.util
 
-    // 定义类 Foo 的构造函数
-    com.tur.util.Foo = function() {
-        console.log("Constructor: Foo()");
-        this.x = 10; // 定义成员变量
-        this.y = 20; // 定义成员变量
-    }
+        // 定义类 Foo 的构造函数
+        com.xtuer.util.Foo = function() {
+            this.x = 10; // 定义成员变量
+            this.y = 20; // 定义成员变量
+        }
 
-    // 给类 Foo 定义函数 bar()
-    com.tur.util.Foo.prototype.bar = function() {
-        console.log("bar(): " + this.x + ", " + this.y);
-        this.sayHello();
-    }
+        // 给类 Foo 定义函数 bar()
+        com.xtuer.util.Foo.prototype.bar = function() {
+            console.log('[' + this.x + ', ' + this.y + ']'); // 调用成员变量
+            this.foo(); // 调用成员函数
+        }
 
-    var Test = com.tur.util.Foo;
-    Test.prototype.sayHello = function() {
-        console.log("sayHello(): " + (this.x + this.y));
-    };
+        com.xtuer.util.Foo.prototype.foo = function() {
+            console.log('Amazing');
+        };
 
-    // 创建对象，调用对象的函数
-    var x = new com.tur.util.Foo(); // OK
-    x.bar();      // OK
-    x.sayHello(); // OK
-
-    // com.tur.util.Foo(); // OK
-    // new com.tur.util.Foo.bar(); // Error
+        var x = new com.xtuer.util.Foo(); // 创建对象，调用对象的函数
+        x.bar();
+        x.foo();
     </script>
 </body>
+
 </html>
