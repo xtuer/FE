@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        var courseIdImage = "img/DL-001_icon.png";
+        var courseNameImage = "img/zscqrm_icon.png";
+
+        var simpleChapters = [
+            //  {name: '课程介绍', title: '课程介绍', url: 'content/kcjs.html', id: 'DL001_ch000',duration:2},
+            //  {name: '说明', title: '说明', url: 'content/ch_00.html', id: 'DL001_ch001',duration:2},
+        ];
+
+        var chapters = [
+            {name: '你大爷', sections: [
+                {name: '4.	商标', title: '4.	商   标', url: 'content/ch_04.html', id: 'DL001_ch04'},
+   			    {name: '5.	地理标志', title: '5.	地理标志', url: 'content/ch_05.html', id: 'DL001_ch05'}
+            ]},
+            {name: '你爷爷', sections: [
+                {name: '4.	商标', title: '4.	商   标', url: 'content/ch_04.html', id: 'DL001_ch04'},
+   			    {name: '5.	地理标志', title: '5.	地理标志', url: 'content/ch_05.html', id: 'DL001_ch05'}
+            ]}
+        ];
+    </script>
+</head>
+<body>
+    <!--banner-->
+    <!-- <div class="header">
+        <img id="course_id">
+        <img id="course_name">
+    </div> -->
+
+    <!--con开始-->
+    <div class="main clearfix">
+        <div class="side-bar">
+            <div class="course_title">课程内容</div>
+            <div id="slide-box">
+                <ul class="simpleTemplate">
+                    <a href="#" class="collapse" data-title="" data-url="">课程介绍</a>
+                </ul>
+                <ul class="template">
+                    <a href="#" class="collapse">Qt 绘图</a>
+                    <li><a href="#" data-title="" data-url="">绘图基础</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="title"><span>课程介绍</span></div>
+            <div class="article">
+                <iframe src="content/kcjs.html" id="content" scrolling="yes"></iframe>
+            </div>
+        </div>
+    </div>
+    <!--con结束-->
+
+    <!-- <div class="footer">
+        <div class="text clearfix">
+            <span>版权所有</span>
+            <i></i>
+            <p>世界知识产权组织</p>
+            <div>(建议使用1024×768及以上分辨率获得最佳浏览效果)</div>
+        </div>
+    </div> -->
+    <script src="js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="js/public.js"></script>
+</body>
+</html>

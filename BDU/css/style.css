@@ -1,0 +1,138 @@
+body{ font-family: "微软雅黑", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;}
+
+
+html {
+	padding: 0;
+	margin: 0;
+}
+
+.con{ width:960px; margin:21px auto;}
+.con_l{ float:left; width:242px;}
+.con_r{ float:right; width:704px;}
+
+.course_tit{width:242px; height:30px; background:#405076; color:#fff; font-size:18px; text-align: center; line-height:30px;}
+.course_box{width:240px; border:1px solid #1e739a; border-top:none; height:632px;overflow-y:scroll;}
+
+.r_tit{ width:100%; height:30px; padding-left:70px; color:#fff; line-height:30px; font-weight:bold;}
+/*.article{ border:1px solid #1e739a;}*/
+.article iframe{ width:100%; height:100%; border:none;}
+
+/*con_list子栏目*/
+.end{ width:849px; margin:10px auto; height:50px;}
+.line{ width:849px; height:0px; border:3px solid #333333;}
+.text{ width:530px; margin:12px auto; margin-bottom: 0; font-size:12px;}
+.text span{ float:left;}
+.text i{float:left; width:15px; height:15px; background:url(../img/c.png); margin-left:5px; margin-right:10px;}
+.text p{ float:left; color:#004aa4;}
+.text div{ float:left; border-left:1px solid #666666; padding-left:11px; margin-left:20px;}
+.con_list .active2 a{ color:red;}
+.tit.aaa{ color:#196fa0;}
+
+.header {
+    position: relative;
+    width: 960px;
+    height: 136px;
+    background: url(../img/header.png);
+    margin: auto;
+ }
+
+.footer {
+    width: 849px;
+    margin: 10px auto;
+    height: 30px;
+	margin-bottom: 0;
+}
+
+#course_id {
+    position: relative;
+    top: 30px;
+    left: 60px;
+}
+
+#course_name {
+    position: absolute;
+}
+
+.main {
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.side-bar {
+    width: 240px;
+    border: 1px solid #405076;
+    float: left;
+}
+
+.side-bar .course_title {
+    background: #405076;
+    color:#fff; font-size:18px; text-align: center; line-height:30px;
+}
+
+.content {
+    width: 640px;
+    border: 1px solid #405076;
+    float: right;
+}
+
+.content #title {
+    background: #405076;
+    color:#fff; font-size:18px; line-height:30px;
+}
+
+.content #title span {
+    margin-left: 30px;
+}
+
+.content .article iframe{ width:100%; height:100%; border:none;}
+
+#slide-box {
+    /*float:left;*/
+    /*width:240px;*/
+    /*border:1px solid #1e739a; border-top:none; height:632px;overflow-y:scroll;*/
+    overflow-y:scroll;
+}
+#slide-box ul > a {
+    display: block;
+    text-decoration: none;
+    padding-left:30px;
+    padding-top:16px;
+    padding-bottom:15px;
+    font-size:16px;
+}
+#slide-box ul {
+    padding-left:0;
+    margin-top: 0;
+    border-bottom:1px solid #a5a5a5;
+    margin-left:10px;
+    margin-right: 10px;
+}
+#slide-box ul:last-child {
+    margin-bottom: 0;
+}
+#slide-box li {
+    list-style: none;
+    padding-top:10px;
+    padding-bottom:10px;
+    border-bottom:1px dashed #aed5eb;
+    width:170px;
+    padding-left:30px;
+}
+ #slide-box li a{
+    font-size:14px;
+ }
+#slide-box li:last-child{ border-bottom:none;}
+.template, .simpleTemplate {
+    display: none;
+}
+#slide-box ul > a.collapse {
+    background:url('../img/icon1.png') no-repeat 10px 20px;
+    color:#454545;
+}
+#slide-box ul > a.expand {
+    background:url('../img/icon2.png') no-repeat 10px 20px ;
+    color:#196fa0;
+}
+#slide-box ul li>a.active{
+        color:red;
+}
