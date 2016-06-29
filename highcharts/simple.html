@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <script src="jquery.js"></script>
+    <script src="highcharts.js"></script>
+
+    <style>
+        #scrollArea {
+            width: 100%;
+            height: 400px;
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scrollArea">
+        <div id="container"></div>
+    </div>
+
+    <script type="text/javascript">
+        $(function() {
+            // TODO: 只需要填充数据即可
+            var data = [
+                ['李荣惠', 1],
+                ['王老师', 1],
+                ['朱霞', 2],
+                ['李荣惠', 3],
+                ['王老师', 1],
+                ['朱霞', 4],
+                ['李荣惠', 2],
+                ['王老师', 1],
+                ['朱霞', 1],
+                ['李荣惠', 1],
+                ['王老师', 1],
+                ['朱霞', 2],
+                ['李荣惠', 3],
+                ['王老师', 1],
+                ['朱霞', 4],
+                ['李荣惠', 2],
+                ['王老师', 1],
+                ['朱霞', 1],
+                ['李荣惠', 1],
+                ['王老师', 1],
+                ['朱霞', 2],
+                ['李荣惠', 2],
+                ['王老师', 1],
+                ['朱霞', 1],
+                ['李荣惠', 1],
+                ['王老师', 1],
+                ['朱霞', 2],
+
+            ];
+
+            $('#container').width(data.length * 60);
+
+            $('#container').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '教案统计'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '教案数量'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    headerFormat: '{point.key}: {point.y}',
+                    pointFormat: ''
+                },
+                series: [{
+                    name: 'Population',
+                    data: data,
+                    dataLabels: {
+                        enabled: true,
+                        rotation: 0,
+                        color: '#FFFFFF',
+                        align: 'center',
+                        format: '{}', // one decimal
+                        y: 25, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+        });
+    </script>
+</body>
+
+</html>
