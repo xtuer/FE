@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>自定义 HTML5 播放器</title>
+
+    <style media="screen">
+        #player-container {
+            width: 600px;
+        }
+
+        #slider {
+            width: 100%;
+            display: block;
+        }
+
+        #player {
+            width: 100%;
+        }
+
+        #play-or-pause-button {
+            width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="player-container">
+        <!-- 删除 controls 不显示播放器默认的工具栏 -->
+        <video id="player" src="http://china-bigdatauniversity.oss-cn-qingdao.aliyuncs.com/BD801EN%2FL02V01_GettingStarted.mp4" autoplay></video>
+
+        <div id="player-control-bar">
+            <input id="slider" type="range" name="name" value="0" min="0" max="1000" step="1">
+            <button id="play-or-pause-button">暂停</button>
+        </div>
+    </div>
+
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var player = $('#player').get(0); // 播放器，必须使用 Dom Element 才可以
+
+            // 播放或者暂停
+            $('#play-or-pause-button').click(function() {
+                if (player.paused) {
+                    player.play();
+                    $(this).text('暂停');
+                } else {
+                    player.pause();
+                    $(this).text('播放');
+                }
+            });
+
+            // 拖动 slider 时改变播放进度
+            $('#slider').change(function() {
+                var progress = $(this).val() / 1000;
+                player.currentTime = player.duration * progress; // player.duration 视频的总时长
+            });
+
+            // 播放进度的回调
+            $('#player').on('timeupdate', function() {
+                var progress = player.currentTime / player.duration * 1000;
+                $('#slider').val(progress);
+            });
+        });
+    </script>
+</body>
+
+</html>
