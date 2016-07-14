@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Art Template Demo</title>
+    <script src="template.js" charset="utf-8"></script>
+    <script src="jquery.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="zoo">
+        <!-- [1]. 定义模版 -->
+        <script id="templateId" type="text/html">
+            <ul data-name="{{name}}" data-city="{{city}}">
+                <!--遍历数组-->
+                {{each animals as animal}}
+                    <li>{{animal}}</li>
+                {{/each}}
+            </ul>
+        </script>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // [2]. 模版使用的数据
+            var data = {
+                name: 'Zoologischer Garten',
+                city: 'Berlin',
+                animals: ['大象', '老虎', '狮子', '猴子']
+            };
+
+            // [3]. 使用模版生成 HTML，默认对输出进行转义，不转义使用 {{#value}}
+            var html = template('templateId', data);
+            $('#zoo').append(html); // [4]. 添加生成的 HTML 到 DOM
+        });
+    </script>
+</body>
+
+</html>
