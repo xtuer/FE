@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="jquery.min.js" charset="utf-8"></script>
+    <style media="screen">
+        body {
+            padding: 30px;
+        }
+
+        a {
+            background-color: #4a89dc;
+            border-color: #4a89dc;
+            color: #FFF;
+            padding: 10px;
+        }
+
+        a.disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+            filter: progid:DXImageTransform.Microsoft.Alpha(opacity=65); /* IE6 - IE8 */
+        }
+    </style>
+</head>
+
+<body>
+    <a class="exam-button" href="http://www.baidu.com" target="_blank">Baidu</a>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // 按钮只能点击一次
+            $('.exam-button').click(function(e) {
+                var $a = $(this);
+
+                if ($a.hasClass('disabled')) {
+                    e.preventDefault();
+                } else {
+                    $a.addClass('disabled');
+                    $a.attr('title', '不可重复点击');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
