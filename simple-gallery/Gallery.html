@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Gallery</title>
+        <style media="screen">
+            #gallery {
+                position: relative;
+                margin-left: 20px;
+                width: 900px;
+                height: 600px;
+            }
+
+            #gallery ul {
+                list-style: none;
+            }
+
+            #gallery ul li {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="gallery">
+            <ul>
+                <li><img src="1.jpg" alt="" /></li>
+                <!-- 隐藏第一张后的图片 -->
+                <li class="hidden"><img src="2.jpg" alt="" /></li>
+                <li class="hidden"><img src="3.jpg" alt="" /></li>
+            </ul>
+        </div>
+
+        <button type="button" id="prev-button">Previous</button>
+        <button type="button" id="next-button">Next</button>
+
+        <script src="../jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            'use strict';
+
+            var imageCount = $('#gallery ul li').size(); // 图片的数量
+            var currentIndex = 0; // 当前图片的下标
+            var right = true; // true 为向右切换图片，false 为向左切换图片
+            var intervalId = 0; // 自动播放线程的 id
+            var delay = 2000; // 自动播放时间
+
+            restartAutoExchangeImage();
+
+            // 点击上一张按钮
+            $('#prev-button').click(function() {
+                right = false;
+                changeImage();
+                restartAutoExchangeImage();
+            });
+
+            // 点击下一张按钮
+            $('#next-button').click(function() {
+                right = true;
+                changeImage();
+                restartAutoExchangeImage();
+            });
+
+            // 自动播放，需要清除上一次的 interval，否则会有多个 interval 同时运行
+            function restartAutoExchangeImage() {
+                clearInterval(intervalId);
+                intervalId = setInterval(changeImage, delay);
+            }
+
+            // 切换图片
+            function changeImage() {
+                $('#gallery ul li').eq(currentIndex).fadeOut(); // 隐藏当前图片
+                // 计算下一张要显示的图片的下标，right 为 true 时选择右边一张图片，为 false 选择左边的一张图片
+                currentIndex = (right === true) ? ((currentIndex + 1) % imageCount) : ((currentIndex - 1 + imageCount) % imageCount);
+                $('#gallery ul li').eq(currentIndex).fadeIn(); // 显示图片
+            }
+        </script>
+    </body>
+</html>
