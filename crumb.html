@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {
+            padding: 50px;
+            font-family: "微软雅黑", Helvetica, Arial, sans-serif;
+        }
+
+        #step span {
+            position: relative;
+            display: table;
+            float: left;
+            /*width: 20%;*/
+            height: 40px;
+            margin-right: 42px; /* 留 2px(42-40) 的空白，让看上去有一个白边 */
+            word-break: keep-all;
+            background-color: #dde1e9;
+            font-size: 16px;
+            line-height: 40px;
+        }
+
+        #step .first:after,
+        #step .middle:after {
+            position: absolute;
+            top: 0;
+            right: -40px;
+            width: 0;
+            height: 0;
+            content: '';
+            border: 20px solid transparent;
+            border-left: 20px solid #dde1e9;
+        }
+
+        #step .middle:before,
+        #step .last:before {
+            position: absolute;
+            top: 0;
+            left: -40px;
+            width: 0;
+            height: 0;
+            content: '';
+            border: 20px solid #dde1e9;
+            border-left: 20px solid transparent;
+        }
+
+        #step .active {
+            border-color: #e6af0d;
+            background-color: #e6af0d;
+        }
+
+        #step .active:before {
+            border-color: #e6af0d;
+            border-left-color: transparent;
+        }
+
+        #step .active:after {
+            border-color: transparent;
+            border-left-color: #e6af0d;
+        }
+
+        #step .first {
+            padding-left: 20px;
+        }
+
+        #step .last {
+            padding-right: 20px;
+        }
+
+        #step .first, #step .middle {
+            padding-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="step">
+        <span class="first">1. 提交订单</span>
+        <span class="middle">2. 商品出库</span>
+        <span class="middle active">3. 等待收货</span>
+        <span class="last">4. 完成</span>
+    </div>
+</body>
+
+</html>
