@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="http://cdn.staticfile.org/semantic-ui/2.2.7/semantic.min.css" rel="stylesheet">
+
+    <style media="screen">
+        body {
+            padding: 20px;
+        }
+        /* 内容部分离菜单更近 */
+
+        .pusher {
+            transform: translate3d(53px, 0, 0) !important;
+        }
+
+        #vue-course {
+            margin: 0;
+        }
+
+        #search-box {
+            display: none;
+        }
+
+        #search-box .form {
+            background: gray;
+            height: 200px;
+        }
+
+        .ui.grid .field {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .card:hover {
+            cursor: pointer;
+        }
+
+        .dimmer {
+            padding: 5px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            overflow: hidden;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <!-- [1] 菜单栏 -->
+    <div class="ui left vertical inverted visible sidebar labeled icon menu">
+        <a class="item"><i class="home icon"></i>Home</a>
+        <a class="item"><i class="block layout icon"></i>Topics</a>
+        <a class="item"><i class="smile icon"></i>Friends</a>
+    </div>
+
+    <div class="ui container pusher grid">
+        <!-- 按钮 -->
+        <div class="ui column row">
+            <div class="ui column">
+                <div class="ui buttons">
+                    <div class="ui labeled icon button" id="create-course-button"><i class="icon add"></i>创建</div>
+                    <div class="ui right labeled icon button" id="search-course-button"><i class="icon search"></i>搜索</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索 -->
+        <div class="ui column row" id="search-box">
+            <div class="ui column">
+                <div class="ui form"></div>
+            </div>
+        </div>
+
+        <!-- 课程列表，每行 5 列 -->
+        <div class="ui row" id="vue-courses" style="padding-right: 0; padding-top: 0;">
+            <div class="ui stackable five column grid" style="padding-right: 0;">
+                <!-- 点击课程时弹出编辑对话框 -->
+                <div class="ui column" v-for="(course, index) in courses" @click="editCourse(index)" :data-id="course.courseId" :key="course.courseId">
+                    <div class="ui card">
+                        <div class="ui image">
+                            <img :src="course.image">
+                            <!-- 描述使用遮罩层显示 -->
+                            <div class="ui dimmer" @click="editCourse(index)">
+                                <div class="content">
+                                    <div class="center">
+                                        {{course.description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="extra content">{{course.title}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹出框，编辑课程 -->
+    <div id="vue-course" class="ui grid" style="display: none">
+        <div class="ui row form">
+            <div class="ui four wide column">
+                <img :src="course.image" alt="" class="ui bordered rounded image">
+            </div>
+
+            <div class="ui twelve wide column grid" style="padding-right: 0;">
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">标题</div>
+                        <input type="text" name="title" v-model="course.title">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">讲师</div>
+                        <input type="text" name="instructor" v-model="course.instructor">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">视频</div>
+                        <input type="text" name="videoURL" v-model="course.videoURL">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui labeled input">
+                        <div class="ui label">标签</div>
+                        <input type="text" name="tags" v-model="course.tags">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <textarea name="description" rows="6" cols="80" v-model="course.description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
+    <script src="http://cdn.staticfile.org/layer/2.3/layer.js" charset="utf-8"></script>
+    <script src="http://cdn.staticfile.org/semantic-ui/2.2.7/semantic.min.js"></script>
+    <script src="http://cdn.staticfile.org/vue/2.0.3/vue.min.js"></script>
+    <script src="mock.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 点击编辑的课程
+            var vueSelectedCourse = new Vue({
+                el: '#vue-course',
+                data: {
+                    course: emptyCourse(),
+                    courseIndex: -1
+                }
+            });
+
+            // 课程数据
+            var vueCourses = new Vue({
+                el: '#vue-courses',
+                data: {
+                    courses: (typeof mock === 'undefined') ? [] : mock.courses
+                },
+                methods: {
+                    editCourse: function(index) {
+                        vueSelectedCourse.courseIndex = index;
+                        vueSelectedCourse.course = $.extend({}, vueCourses.courses[index]);
+                        showEditCourseDialog();
+                    }
+                }
+            });
+
+            // 点击创建按钮弹出创建菜单
+            $('#create-course-button').click(function(event) {
+                vueSelectedCourse.course = emptyCourse();
+                vueSelectedCourse.courseIndex = -1; // 编辑课程的下标为 -1，表示创建
+                showEditCourseDialog();
+            });
+
+            // 点击搜索按钮 toggle 搜索表单
+            $('#search-course-button').click(function(event) {
+                $('#search-box').slideToggle('fast');
+            });
+
+            // 鼠标进入时显示说明，离开后隐藏
+            $('.ui.card').hover(function() {
+                $('.ui.dimmer', this).dimmer('show');
+            }, function() {
+                $('.ui.dimmer', this).dimmer('hide');
+            });
+
+            // 空的课程对象，使用克隆是为了创建时使用
+            function emptyCourse() {
+                return {
+                    courseId: 0,
+                    title: '',
+                    instructor: '',
+                    image: 'http://omqpd0pt4.bkt.clouddn.com/Unknown.png',
+                    videoURL: '',
+                    description: ''
+                };
+            }
+
+            // 创建或则更新课程，创建时 courseIndex 为 -1，更新时为其他
+            function saveOrCreateCourse() {
+                if (-1 === vueSelectedCourse.courseIndex) {
+                    vueCourses.courses.push($.extend({}, vueSelectedCourse.course));
+                } else {
+                    vueCourses.courses.splice(vueSelectedCourse.courseIndex, 1, $.extend({}, vueSelectedCourse.course));
+                }
+            }
+
+            // 删除课程
+            function removeCourse() {
+                if (-1 != vueSelectedCourse.courseIndex) {
+                    vueCourses.courses.splice(vueSelectedCourse.courseIndex, 1);
+                    vueSelectedCourse.courseIndex = emptyCourse(); // 重置选中的课程为空白课程，防止再次调用 removeCourse() 造成数据问题
+                }
+            }
+
+            $('#menu-header').click(function(event) {
+                $('#sub-menu').slideToggle();
+            });
+
+            // 弹出编辑课程对话框
+            function showEditCourseDialog() {
+                layer.open({
+                    type:  1,
+                    title: '编辑课程', // [可选]
+                    title: false,
+                    closeBtn: false,
+                    content: $('#vue-course'), // 对话框中的内容部分
+                    area: ['700px', '440px'], // 对话框的大小 [可选]
+                    shadeClose: false, // 为 true 时点击遮罩关闭 [可选]
+                    btn: ['保存', '删除', '取消'], // 自定义按钮，默认事件为关闭对话框，可以对不同的按钮提供事件处理函数 [可选]
+                    yes: function() { // [可选]
+                        saveOrCreateCourse();
+                        layer.closeAll(); // 关闭所有弹出窗口
+                    },
+                    btn2: function(e) {
+                        removeCourse();
+                        // return false; // 不关闭弹出窗口
+                    }
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>
