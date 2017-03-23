@@ -8,16 +8,12 @@
 
     <style media="screen">
         body {
-            padding: 20px;
+            padding: 20px 0;
         }
-        /* 内容部分离菜单更近 */
 
+        /* 内容部分离菜单更近 */
         .pusher {
             transform: translate3d(53px, 0, 0) !important;
-        }
-
-        #vue-course {
-            margin: 0;
         }
 
         #search-box {
@@ -25,8 +21,11 @@
         }
 
         #search-box .form {
-            background: gray;
             height: 200px;
+        }
+
+        #vue-course {
+            margin: 0;
         }
 
         .ui.grid .field {
@@ -50,7 +49,7 @@
 </head>
 
 <body>
-    <!-- [1] 菜单栏 -->
+    <!-- [1] 侧边栏 -->
     <div class="ui left vertical inverted visible sidebar labeled icon menu">
         <a class="item"><i class="home icon"></i>Home</a>
         <a class="item"><i class="block layout icon"></i>Topics</a>
@@ -60,40 +59,34 @@
     <div class="ui container pusher grid">
         <!-- 按钮 -->
         <div class="ui column row">
-            <div class="ui column">
-                <div class="ui buttons">
-                    <div class="ui labeled icon button" id="create-course-button"><i class="icon add"></i>创建</div>
-                    <div class="ui right labeled icon button" id="search-course-button"><i class="icon search"></i>搜索</div>
-                </div>
+            <div class="ui buttons">
+                <div class="ui labeled icon button" id="create-course-button"><i class="icon add"></i>创建</div>
+                <div class="ui right labeled icon button" id="search-course-button"><i class="icon search"></i>搜索</div>
             </div>
         </div>
 
         <!-- 搜索 -->
         <div class="ui column row" id="search-box">
-            <div class="ui column">
-                <div class="ui form"></div>
-            </div>
+            <div class="ui form segment" style="margin-right: 2em;"></div>
         </div>
 
         <!-- 课程列表，每行 5 列 -->
-        <div class="ui row" id="vue-courses" style="padding-right: 0; padding-top: 0;">
-            <div class="ui stackable five column grid" style="padding-right: 0;">
-                <!-- 点击课程时弹出编辑对话框 -->
-                <div class="ui column" v-for="(course, index) in courses" @click="editCourse(index)" :data-id="course.courseId" :key="course.courseId">
-                    <div class="ui card">
-                        <div class="ui image">
-                            <img :src="course.image">
-                            <!-- 描述使用遮罩层显示 -->
-                            <div class="ui dimmer" @click="editCourse(index)">
-                                <div class="content">
-                                    <div class="center">
-                                        {{course.description}}
-                                    </div>
+        <div class="ui stackable five column row grid" id="vue-courses" style="padding-right: 0;">
+            <!-- 点击课程时弹出编辑对话框 -->
+            <div class="ui column" v-for="(course, index) in courses" @click="editCourse(index)" :data-id="course.courseId" :key="course.courseId">
+                <div class="ui card">
+                    <div class="ui image">
+                        <img :src="course.image">
+                        <!-- 描述使用遮罩层显示 -->
+                        <div class="ui dimmer" @click="editCourse(index)">
+                            <div class="content">
+                                <div class="center">
+                                    {{course.description}}
                                 </div>
                             </div>
                         </div>
-                        <div class="extra content">{{course.title}}</div>
                     </div>
+                    <div class="extra content">{{course.title}}</div>
                 </div>
             </div>
         </div>
@@ -227,7 +220,7 @@
             // 弹出编辑课程对话框
             function showEditCourseDialog() {
                 layer.open({
-                    type:  1,
+                    type: 1,
                     title: '编辑课程', // [可选]
                     title: false,
                     closeBtn: false,
