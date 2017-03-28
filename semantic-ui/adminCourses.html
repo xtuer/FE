@@ -11,8 +11,8 @@
             padding: 20px 0;
         }
 
-        /* 内容部分离菜单更近 */
         .pusher {
+            /* 内容部分离菜单更近 */
             transform: translate3d(53px, 0, 0) !important;
         }
 
@@ -28,19 +28,30 @@
             margin: 0;
         }
 
+        .ui.card,
+        .ui.cards>.card {
+            /* 边框更干净 */
+            box-shadow: 0 1px 3px 0 #D4D4D5;
+        }
+
+        .ui.card:hover {
+            cursor: pointer;
+        }
+
         .ui.grid .field {
             padding-left: 0;
             padding-right: 0;
         }
 
-        .card:hover {
-            cursor: pointer;
-        }
-
         .dimmer {
             padding: 5px;
+            font-size: 13px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
+            overflow: hidden;
+        }
+
+        .blurring {
             overflow: hidden;
         }
 
@@ -57,7 +68,7 @@
     </div>
 
     <div class="ui container pusher grid">
-        <!-- 按钮 -->
+        <!-- [2] 按钮 -->
         <div class="ui column row">
             <div class="ui buttons">
                 <div class="ui labeled icon button" id="create-course-button"><i class="icon add"></i>创建</div>
@@ -65,24 +76,22 @@
             </div>
         </div>
 
-        <!-- 搜索 -->
+        <!-- [3] 搜索 -->
         <div class="ui column row" id="search-box">
             <div class="ui form segment" style="margin-right: 2em;"></div>
         </div>
 
-        <!-- 课程列表，每行 5 列 -->
+        <!-- [4] 课程列表，每行 5 列 -->
         <div class="ui stackable five column row grid" id="vue-courses" style="padding-right: 0;">
             <!-- 点击课程时弹出编辑对话框 -->
             <div class="ui column" v-for="(course, index) in courses" @click="editCourse(index)" :data-id="course.courseId" :key="course.courseId">
                 <div class="ui card">
-                    <div class="ui image">
+                    <div class="ui image blurring" @mouseenter="showDescription" @mouseleave="hideDescription">
                         <img :src="course.image">
                         <!-- 描述使用遮罩层显示 -->
                         <div class="ui dimmer" @click="editCourse(index)">
                             <div class="content">
-                                <div class="center">
-                                    {{course.description}}
-                                </div>
+                                <div class="center">{{course.description}}</div>
                             </div>
                         </div>
                     </div>
@@ -92,7 +101,7 @@
         </div>
     </div>
 
-    <!-- 弹出框，编辑课程 -->
+    <!-- [5] 弹出对话框，编辑课程 -->
     <div id="vue-course" class="ui grid" style="display: none">
         <div class="ui row form">
             <div class="ui four wide column">
@@ -108,9 +117,19 @@
                 </div>
 
                 <div class="field">
-                    <div class="ui labeled input">
-                        <div class="ui label">讲师</div>
-                        <input type="text" name="instructor" v-model="course.instructor">
+                    <div class="two fields">
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">讲师</div>
+                                <input type="text" name="instructor" v-model="course.instructor">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui labeled input">
+                                <div class="ui label">权重</div>
+                                <input type="text" name="weight">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -128,19 +147,24 @@
                 </div>
 
                 <div class="field">
-                    <textarea name="description" rows="6" cols="80" v-model="course.description"></textarea>
+                    <textarea name="description" rows="5" cols="80" v-model="course.description"></textarea>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
-    <script src="http://cdn.staticfile.org/layer/2.3/layer.js" charset="utf-8"></script>
+    <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/layer/2.3/layer.js"></script>
+    <script src="http://cdn.staticfile.org/vue/2.0.3/vue.js"></script>
     <script src="http://cdn.staticfile.org/semantic-ui/2.2.7/semantic.min.js"></script>
-    <script src="http://cdn.staticfile.org/vue/2.0.3/vue.min.js"></script>
     <script src="mock.js"></script>
+
     <script>
         $(document).ready(function() {
+            $.fn.dimmer.settings.opacity = 0.5;
+            $.fn.dimmer.settings.duration = 500;
+            $.fn.dimmer.settings.transition = 'fade';
+
             // 点击编辑的课程
             var vueSelectedCourse = new Vue({
                 el: '#vue-course',
@@ -158,14 +182,23 @@
                 },
                 methods: {
                     editCourse: function(index) {
+                        // 防止引用造成直接编辑课程，所以先克隆点击的课程，然后编辑，保存成功后才更新被点击的课程
                         vueSelectedCourse.courseIndex = index;
                         vueSelectedCourse.course = $.extend({}, vueCourses.courses[index]);
                         showEditCourseDialog();
+                    },
+                    showDescription: function(e) {
+                        // 显示 dimmer 中的 description
+                        $('.ui.dimmer', e.currentTarget).dimmer('show');
+                    },
+                    hideDescription: function(e) {
+                        // 隐藏 dimmer 中的 description
+                        $('.ui.dimmer', e.currentTarget).dimmer('hide');
                     }
                 }
             });
 
-            // 点击创建按钮弹出创建菜单
+            // 点击创建按钮弹出创建课程对话框
             $('#create-course-button').click(function(event) {
                 vueSelectedCourse.course = emptyCourse();
                 vueSelectedCourse.courseIndex = -1; // 编辑课程的下标为 -1，表示创建
@@ -177,14 +210,7 @@
                 $('#search-box').slideToggle('fast');
             });
 
-            // 鼠标进入时显示说明，离开后隐藏
-            $('.ui.card').hover(function() {
-                $('.ui.dimmer', this).dimmer('show');
-            }, function() {
-                $('.ui.dimmer', this).dimmer('hide');
-            });
-
-            // 空的课程对象，使用克隆是为了创建时使用
+            // 空的课程对象
             function emptyCourse() {
                 return {
                     courseId: 0,
@@ -213,10 +239,6 @@
                 }
             }
 
-            $('#menu-header').click(function(event) {
-                $('#sub-menu').slideToggle();
-            });
-
             // 弹出编辑课程对话框
             function showEditCourseDialog() {
                 layer.open({
@@ -225,10 +247,10 @@
                     title: false,
                     closeBtn: false,
                     content: $('#vue-course'), // 对话框中的内容部分
-                    area: ['700px', '440px'], // 对话框的大小 [可选]
-                    shadeClose: false, // 为 true 时点击遮罩关闭 [可选]
-                    btn: ['保存', '删除', '取消'], // 自定义按钮，默认事件为关闭对话框，可以对不同的按钮提供事件处理函数 [可选]
-                    yes: function() { // [可选]
+                    area: ['700px'], // 对话框的大小, 可以同时指定高宽 ['700px', '440px']
+                    shadeClose: false, // 为 true 时点击遮罩关闭
+                    btn: ['保存', '删除', '取消'], // 自定义按钮
+                    btn1: function() {
                         saveOrCreateCourse();
                         layer.closeAll(); // 关闭所有弹出窗口
                     },
