@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>学历规划</title>
+    <script src="lib/ckeditor/ckeditor.js"></script>
+    <style media="screen">
+        body {
+            font-family: "微软雅黑", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .plan {
+            border: 1px solid #DDD;
+            margin-bottom: 20px;
+        }
+        .plan .title {
+            border-bottom: 1px solid #EEE;
+            cursor: default;
+            background: grey;
+        }
+        .plan .title:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 学历规划内容 -->
+    <div class="plans" id="plans">
+        <div class="plan" v-for="(plan, index) in plans">
+            <div class="title" @click="editPlan(index)">{{plan.title}}</div>
+            <div class="content" v-html="plan.content"></div>
+        </div>
+    </div>
+
+    <!-- 修改万后一次性的保存所有内容到服务器，而不是编辑一次保存一次 -->
+    <button id="save-button">保存到服务器</button>
+
+    <!-- 编辑对话框 -->
+    <div id="editor-box" style="display: none; padding: 5px;">
+        <textarea id="planEditor"></textarea>
+    </div>
+
+    <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/layer/2.3/layer.js"></script>
+    <script src="http://cdn.staticfile.org/vue/2.0.3/vue.js"></script>
+
+    <script>
+        /*----------------------------------------------------------------------------|
+        |                                    Vue 相关                                  |
+        |----------------------------------------------------------------------------*/
+        var vuePlans = new Vue({
+            el: '#plans',
+            data: {
+                selectedPlanIndex: -1,
+                plans: [{
+                    title: '1. 哪个学校好？',
+                    content: '...'
+                },{
+                    title: '2. 学什么？',
+                    content: '<img src="http://tupian.enterdesk.com/2015/gha/0800/2204/01.jpg.200.150.jpg">'
+                },{
+                    title: '3. 什么时候考试？',
+                    content: '...'
+                },{
+                    title: '4. 学挖掘机哪家强？',
+                    content: '<p>山东<font color="red">济南</font>找<b>蓝翔</b></p>'
+                }]
+            },
+            methods: {
+                editPlan: function(index) {
+                    this.selectedPlanIndex = index;
+                    showEditorDialog();
+                }
+            }
+        });
+    </script>
+    <script>
+        /*----------------------------------------------------------------------------|
+        |                                    编辑器相关                                 |
+        |----------------------------------------------------------------------------*/
+        createCkeditor('planEditor'); // 先创建一个固定高度的 editor，弹出层的效果更好
+
+        // 显示编辑对话框
+        function showEditorDialog() {
+            layer.open({
+                type: 1,
+                title: '规划',
+                title: false,
+                closeBtn: false,
+                content: $('#editor-box'), // 对话框中的内容部分
+                area: ['700px'], // 对话框的大小, 可以同时指定高宽 ['700px', '440px']
+                shadeClose: false, // 为 true 时点击遮罩关闭
+                zIndex: 1000, // *** [1] 重要 ***
+                btn: ['保存', '取消'], // 自定义按钮
+                btn1: function() {
+                    // 点击保存按钮时，取得编辑器中的内容，保存为对应 plan 的内容
+                    var content = CKEDITOR.instances.planEditor.getData();
+                    vuePlans.plans[vuePlans.selectedPlanIndex].content = content;
+                    layer.closeAll(); // 关闭所有弹出窗口
+                },
+                btn2: function(e) {
+                    return true; // 不关闭弹出窗口
+                },
+                success: function() {
+                    // 创建好编辑器后把点击的 plan 的内容显示到编辑器中
+                    createCkeditor('planEditor');
+                    CKEDITOR.instances.planEditor.setData(vuePlans.plans[vuePlans.selectedPlanIndex].content);
+                }
+            });
+        }
+
+        // 创建 CKEditor 编辑器，如果已经存在，则先销毁
+        function createCkeditor(name) {
+            var editor = CKEDITOR.instances[name];
+            if (editor) {
+                editor.destroy(true);
+            }
+            CKEDITOR.replace(name, {
+                language: 'zh-cn',
+                allowedContent: true,
+                resize_enabled: false,
+                height: '300px',
+                filebrowserUploadUrl: '/ckeditor-upload-file',
+                filebrowserImageUploadUrl: '/ckeditor-upload-image' // *** [2] 不同页面上传的地址有可能不一样哦 ***
+            });
+        }
+
+    </script>
+</body>
+
+</html>
