@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Tag</title>
+    <style media="screen">
+        body {
+            padding: 100px;
+
+        }
+
+        .tag a {
+            font-family: Menlo;
+            font-size: 13px;
+            font-weight: normal;
+            position: relative;
+            display: inline-block;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 7px 0 10px;
+            border-radius: 0 3px 3px 0;
+            background: grey;
+            text-decoration: none;
+            color: #EEE;
+        }
+
+        .tag a::before {
+            position: absolute;
+            top: 0px;
+            left: -18px;
+            width: 0px;
+            height: 0px;
+            content: "";
+            border: 9px solid transparent;
+            border-right-color: grey;
+        }
+
+        .tag a::after {
+            position: absolute;
+            top: 7px;
+            left: 2px;
+            width: 4px;
+            height: 4px;
+            content: "";
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .tag.c1 a {
+            background: orange;
+        }
+
+        .tag.c1 a::before {
+            border-right-color: orange;
+        }
+
+        .tag.c2 a {
+            background: brown;
+        }
+
+        .tag.c2 a::before {
+            border-right-color: brown;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        ul li {
+            float: left;
+            margin: 5px 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li class="tag c1"><a href="javascript:void(0);">QtBook</a></li>
+        <li class="tag c2"><a href="javascript:void(0);">Spring Core</a></li>
+        <li class="tag"><a href="javascript:void(0);">Spring Mvc</a></li>
+        <li class="tag"><a href="javascript:void(0);">Spring IoC</a></li>
+        <li class="tag"><a href="javascript:void(0);">Spring AOP</a></li>
+        <li class="tag"><a href="javascript:void(0);">程序开发</a></li>
+    </ul>
+
+</body>
+
+</html>
