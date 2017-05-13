@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>创建树形结构</title>
+</head>
+
+<body>
+    <pre id="result"></pre>
+
+    <script type="text/javascript">
+        /**
+         * 树的节点
+         *
+         * @param {int}    id       节点 id
+         * @param {int}    parentId 父节点 id
+         * @param {string} name     节点的名字
+         * @param {int}    count    节点的 count 值
+         */
+        function TreeNode(id, parentId, name, count) {
+            this.id = id;
+            this.parentId = parentId;
+            this.name = name;
+            this.count = count;
+            this.children = []; // 子节点数组
+        }
+
+        /**
+         * 使用节点数据的数组创建树。
+         * 树的节点存储在数组中，节点之间的关系通过 children 数组来存储。
+         *
+         * @param {array} nodes 节点数据的数组
+         */
+        function Tree(nodes) {
+            this.root = null;    // 根节点
+            this.nodes = nodes;  // 节点数据的数组
+            this.treeNodes = []; // 树所有节点的数组
+
+            this.init();
+        }
+
+        Tree.prototype.init = function() {
+            this.root = new TreeNode(0, null, 'ROOT', 0); // 树的虚拟根节点
+
+            // 构建树的所有节点的数组
+            for (var i=0; i<this.nodes.length; ++i) {
+                var node = this.nodes[i];
+                this.treeNodes.push(new TreeNode(node.id, node.parentId, node.name, node.count));
+            }
+
+            // 根据节点之间的关系建立树节点之间的父子引用
+            for (var i=0; i<this.treeNodes.length; ++i) {
+                var node = this.treeNodes[i];
+                var parentIndex = this.indexOfParent(node); // 查找节点的父节点的下标
+
+                // 如果找不到父节点，说明是一级节点，添加为 root 的子节点
+                // 如果找到父节点，则把其加入其父节点的子节点数组
+                if (-1 === parentIndex) {
+                    this.root.children.push(node);
+                } else {
+                    this.treeNodes[parentIndex].children.push(node);
+                }
+            }
+        }
+
+        /**
+         * 查找节点的父节点的下标
+         *
+         * @param  {object} treeNode  节点
+         * @param  {object} treeNodes 所有节点的数组
+         * @return 返回节点的父节点的下标，如果找不到，则返回 -1
+         */
+        Tree.prototype.indexOfParent = function(treeNode) {
+            for (var i=0; i<this.treeNodes.length; ++i) {
+                if (treeNode.parentId === this.treeNodes[i].id) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /**
+         * 每个节点的 count 值为其所有子节点的 count 值的和加上它的 count 值
+         *
+         * @param  {object} treeNode 节点
+         * @return 返回计算后节点的 count 值
+         */
+        Tree.recursiveCount = function(treeNode) {
+            var sum = 0;
+
+            for (var i=0; i<treeNode.children.length; ++i) {
+                sum += Tree.recursiveCount(treeNode.children[i]);
+            }
+
+            treeNode.sum = treeNode.count + sum; // 用新的属性 sum 记录，这样方便验算，也可以直接用 treeNode.count
+
+            return treeNode.sum;
+        }
+
+        // 节点的原始数据，节点之间的父子关系通过 parentId 来指向
+        var nodes = [
+            { 'id': 1, 'parentId': 0, count: 1, 'name': '试卷' },
+            { 'id': 2, 'parentId': 1, count: 2, 'name': '数学' },
+            { 'id': 3, 'parentId': 1, count: 3, 'name': '历史' },
+            { 'id': 4, 'parentId': 2, count: 4, 'name': '参数方程' },
+            { 'id': 5, 'parentId': 2, count: 5, 'name': '贝塞尔曲线' },
+            { 'id': 6, 'parentId': 3, count: 6, 'name': '玄武门事变' },
+            { 'id': 7, 'parentId': 3, count: 7, 'name': '桃园三结义' }
+        ];
+
+        var tree = new Tree(nodes);
+        Tree.recursiveCount(tree.root);
+
+        var html = JSON.stringify(tree.root, null, 4);
+        document.getElementById('result').innerHTML = html;
+    </script>
+</body>
+
+</html>
