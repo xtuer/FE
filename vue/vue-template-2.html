@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <todo-template v-for="todo in todos" :todo="todo" @remove="removeTodo(todo)"></todo-template>
+        </ul>
+    </div>
+
+</body>
+
+<!-- 先引入 Vue -->
+<script src="vue.js"></script>
+
+<script>
+    // `` 定义多行字符串
+    // $emit 用于发射事件
+    Vue.component('todo-template', {
+        props: ['todo'],
+        template: `
+            <li>
+                {{todo.text}}
+                <button @click="$emit('remove')">X</button>
+            </li>
+        `
+    });
+
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                todos: [
+                    {text: 'A'},
+                    {text: 'B'},
+                    {text: 'C'},
+                    {text: 'D'},
+                ]
+            }
+        },
+        methods: {
+            removeTodo(todo) {
+                alert(todo.text);
+            }
+        }
+    });
+</script>
+
+</html>

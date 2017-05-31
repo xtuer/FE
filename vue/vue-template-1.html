@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- 引入样式 -->
+</head>
+
+<body>
+    <script type="text/x-template" id="todos-template">
+        <ol>
+            <li v-for="(todo, index) in todos">
+                {{todo.text}} - {{index}}
+            </li>
+        </ol>
+    </script>
+
+    <div id="app">
+        <q-todos :todos="todos"></q-todos>
+    </div>
+
+</body>
+
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script>
+    Vue.component('q-todos', {
+        props: ['todos'],
+        template: '#todos-template'
+    });
+    var app = new Vue({
+        el: '#app',
+        data: {
+            todos: [
+                {text: 'A'},
+                {text: 'B'},
+                {text: 'C'},
+                {text: 'D'}
+            ]
+        }
+    });
+</script>
+
+</html>
