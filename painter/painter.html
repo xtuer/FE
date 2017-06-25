@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>画图</title>
+
+    <!-- 1. 引入需要的 js 和 css -->
+    <script src='http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js'></script>
+    <script src='painter.js'></script>
+    <link  href="painter.css" rel="stylesheet">
+
+    <style media="screen">
+        body {
+            font-family: Arial, Helvetica, sans-serif; /* 字体 */
+            font-size: 12px; /* 字体大小12像素 */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 2. 定义画图板的 html -->
+    <div id="painter">
+        <!-- 绘图的工具栏 -->
+        <div class="toolbar">
+            <img src="img/move.png"     onclick="painter.changeAction('move', this)" title="移动">
+            <img src="img/curve.png"    onclick="painter.changeAction('curve', this)" title="曲线">
+            <img src="img/line.png"     onclick="painter.changeAction('line', this)" title="线段">
+            <img src="img/polyline.png" onclick="painter.changeAction('polyline', this)" title="折线">
+            <img src="img/rect.png"     onclick="painter.changeAction('rect', this)" title="矩形">
+            <img src="img/circle.png"   onclick="painter.changeAction('circle', this)" title="圆">
+            <img src="img/ellipse.png"  onclick="painter.changeAction('ellipse', this)" title="椭圆">
+
+            <img src="img/eraser.png" onclick="painter.changeAction('eraser', this)" title="橡皮擦">
+            <img src="img/clear.png"  onclick="painter.clear()" title="清空画布">
+
+            <img src="img/undo.png" onclick="painter.undo()" title="后退一步">
+            <img src="img/redo.png" onclick="painter.redo()" title="撤销后退">
+        </div>
+
+        <!-- 画布 -->
+        <canvas class="canvas" width="400" height="400"></canvas>
+
+        <!-- 右键菜单 -->
+        <ul class="menu">
+            <li class="menu-item remove">删除</li>
+            <li class="menu-item back-one">后移一层</li>
+            <li class="menu-item front-one">前移一层</li>
+            <li class="menu-item back-most">移到最后面</li>
+            <li class="menu-item front-most">移到最前面</li>
+        </ul>
+    </div>
+
+    <button>图片数据</button><br>
+    <img id="result">
+
+    <script type="text/javascript">
+        // 3. 初始化画图板
+        var painter = new Painter($('#painter')); // 创建画图板的对象
+        $('#painter .toolbar img:eq(1)').click(); // 默认进行绘制曲线
+
+        // 4. 获取画图板的图片，显示到 img 上
+        $('button').click(function(event) {
+            $('#result').attr('src', painter.getImageDataUrl());
+        });
+    </script>
+</body>
+
+</html>

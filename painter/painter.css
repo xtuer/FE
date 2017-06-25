@@ -1,0 +1,42 @@
+#painter .canvas {
+    border: 1px solid #BBB;
+    border-radius: 4px;
+}
+
+#painter .toolbar img {
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+}
+
+#painter .toolbar img:hover {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#painter .toolbar img.active {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#painter ul.menu {
+    display: none;
+    list-style: none;
+    position: fixed;
+    top: 0;
+    left: 20px;
+    background: #EEE;
+    padding: 8px 0;
+    margin: 0;
+    border-radius: 4px;
+    box-shadow: 1px 1px 5px #888888;
+}
+
+#painter ul.menu li {
+    padding: 5px 10px;
+    cursor: default;
+}
+
+#painter ul.menu li:hover {
+    background: #AAA;
+}
