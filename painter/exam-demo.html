@@ -19,7 +19,12 @@
 
         #painter {
             display: none;
-            padding: 20px;
+            padding: 15px;
+        }
+
+        body .layui-layer-btn {
+            border-top: 1px solid #E9E7E7;
+            text-align: center;
         }
     </style>
 </head>
@@ -48,7 +53,7 @@
         </div>
 
         <!-- 画布 -->
-        <canvas class="canvas" width="400" height="400"></canvas>
+        <canvas class="canvas" width="700" height="400"></canvas>
 
         <!-- 右键菜单 -->
         <ul class="menu">
@@ -75,7 +80,8 @@
                 title: false,
                 shade: 0.8,
                 closeBtn: 0,
-                area: ['450px'], //宽高
+                // area: ['450px'], //宽高
+                maxWidth: 1200, // 默认是 360，太小
                 content: $('#painter'),
                 btn: ['保存', '取消'],
                 success: function() {
