@@ -544,6 +544,20 @@ Painter.prototype.init = function() {
     var self = this;
     self.$canvas.off(); // 先解绑所有事件，否则同一个 canvas 多次用来创建 painter 的时候就会重复绑定事件
 
+    self.$painter.find('.toolbar img').off().on('click', function() {
+        var type = $(this).attr('data-type');
+
+        if ('clear' === type) {
+            self.clear();
+        } else if ('undo' === type) {
+            self.undo();
+        } else if ('redo' === type) {
+            self.redo();
+        } else {
+            self.changeAction(type, this);
+        }
+    });
+
     // 鼠标在画布上按下时事件处理
     // 1. 如果是画图模式，则创建图形
     // 2. 如果是移动模式，如果鼠标在图形上则移动图形，如果不在图形上则移动画布
@@ -681,9 +695,10 @@ Painter.prototype.init = function() {
             var shape = self.findShapeUnder(e.offsetX, e.offsetY);
 
             if (shape) {
-                self.showMenu(shape, e.clientX, e.clientY);
+                var x = self.$canvas.position().left + e.offsetX;
+                var y = self.$canvas.position().top + e.offsetY;
+                self.showMenu(shape, x, y);
             }
-            // self.removeShape(shape);
         }
     });
 };
@@ -717,9 +732,10 @@ Painter.prototype.removeShape = function(shape) {
 };
 
 Painter.prototype.showMenu = function(shape, x, y) {
+    console.log(x + ', ' + y);
     var self = this;
     var $menu = this.$canvas.siblings('.menu');
-    $menu.css({left: x, top: y});
+    $menu.css({position: 'absolute', left: x, top: y});
     $menu.show();
 
     self.$canvas.parent().on('click', function() {
@@ -795,7 +811,7 @@ Painter.prototype.reorderShapes = function() {
  */
 Painter.prototype.changeAction = function(type, elem) {
     $(elem).addClass('active');
-    $(elem).siblings().removeClass('active');
+    $(elem).siblings('img').removeClass('active');
 
     this.actionType = type; // 当前绘制图形的类型
     this.showEraser = false; // 切换绘制的图形后，不在显示橡皮擦
@@ -950,15 +966,6 @@ Painter.prototype.clear = function() {
 };
 
 /**
- * 获取绘制的图片数据。
- *
- * @return {String} Base64 编码后的图片数据
- */
-Painter.prototype.getImageDataUrl = function() {
-    return this.canvas.toDataURL();
-};
-
-/**
  * 判断是否鼠标左键
  * 1 是鼠标左键
  * 2 是鼠标中建
@@ -990,4 +997,20 @@ Painter.prototype.findShapeUnder = function(x, y) {
     }
 
     return null;
+};
+
+/**
+ * 获取绘制的图片数据。
+ *
+ * @return {String} Base64 编码后的图片数据
+ */
+Painter.prototype.getImageDataUrl = function() {
+    return this.canvas.toDataURL();
+};
+
+Painter.prototype.setShapes = function(shapes) {
+    this.shapes = shapes;
+    this.undoStack.length = 0;
+    this.redoStack.length = 0;
+    this.update();
 };

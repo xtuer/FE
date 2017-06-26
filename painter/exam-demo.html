@@ -7,6 +7,7 @@
 
     <!-- 1. 引入需要的 js 和 css -->
     <script src='http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js'></script>
+    <script src="http://cdn.staticfile.org/layer/2.3/layer.js"></script>
     <script src='painter.js'></script>
     <link  href="painter.css" rel="stylesheet">
 
@@ -15,10 +16,19 @@
             font-family: Arial, Helvetica, sans-serif; /* 字体 */
             font-size: 12px; /* 字体大小12像素 */
         }
+
+        #painter {
+            display: none;
+            padding: 20px;
+        }
     </style>
 </head>
 
 <body>
+    <button class="question-button" data-question-id="quesiton-1">问题一</button>
+    <button class="question-button" data-question-id="quesiton-2">问题二</button>
+    <button class="question-button" data-question-id="quesiton-3">问题三</button>
+
     <!-- 2. 定义画图板的 html -->
     <div id="painter">
         <!-- 绘图的工具栏 -->
@@ -50,18 +60,45 @@
         </ul>
     </div>
 
-    <button>图片数据</button><br>
-    <img id="result">
-
     <script type="text/javascript">
         // 3. 初始化画图板
         var painter = new Painter($('#painter')); // 创建画图板的对象
         $('#painter .toolbar img:eq(1)').click(); // 默认进行绘制曲线
+        var store = []; // 存储 painter 里面的 shapes，key 为 questionId，value 为 shapes
 
-        // 4. 获取画图板的图片，显示到 img 上
-        $('button').click(function(event) {
-            $('#result').attr('src', painter.getImageDataUrl());
+        $('.question-button').click(function(event) {
+            var questionId = $(this).attr('data-question-id');
+            var shapes = getShapes(questionId);
+
+            layer.open({
+                type: 1,
+                title: false,
+                shade: 0.8,
+                closeBtn: 0,
+                area: ['450px'], //宽高
+                content: $('#painter'),
+                btn: ['保存', '取消'],
+                success: function() {
+                    $('#painter .toolbar img:eq(1)').click();
+                    painter.setShapes(shapes); // 更新显示
+                },
+                yes: function() { // 点击保存执行的回调函数
+                    saveShapes(questionId, painter.shapes); // 保存数据，以便可以编辑
+                    var base64Image = painter.getImageDataUrl();
+                    console.log(base64Image); // 把此 base64Image 传给服务器端，服务器端保存后返回图片的 URL
+
+                    layer.closeAll(); // 关闭弹出窗口
+                }
+            });
         });
+
+        function getShapes(questionId) {
+            return store[questionId] ? store[questionId] : [];
+        }
+
+        function saveShapes(questionId, shapes) {
+            store[questionId] = shapes;
+        }
     </script>
 </body>
 
