@@ -810,6 +810,13 @@ Painter.prototype.reorderShapes = function() {
  * @return 无返回值
  */
 Painter.prototype.changeAction = function(type, elem) {
+    // 如果正在绘制折线，结束绘制
+    if (this.isDrawingPolyline()) {
+        this.shapeAsDrawing.finish();
+        this.finishDrawingNewShape();
+        this.update();
+    }
+
     $(elem).addClass('active');
     $(elem).siblings('img').removeClass('active');
 
