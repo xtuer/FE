@@ -554,7 +554,7 @@ Painter.prototype.init = function() {
         } else if ('redo' === type) {
             self.redo();
         } else {
-            self.changeAction(type, this);
+            self.changeShape(type, this);
         }
     });
 
@@ -809,7 +809,7 @@ Painter.prototype.reorderShapes = function() {
  * @param  {DOM}    elem DOM element
  * @return 无返回值
  */
-Painter.prototype.changeAction = function(type, elem) {
+Painter.prototype.changeShape = function(type, elem) {
     // 如果正在绘制折线，结束绘制
     if (this.isDrawingPolyline()) {
         this.shapeAsDrawing.finish();
