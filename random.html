@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        /**
+         * 生成随机数的类，参数为随机数的种子，如果种子相同，则生成的随机数序列一样。
+         *
+         * @param {String 或者 Integer} seed 字符串或者整数的随机数种子
+         */
+        function Random(seed) {
+            this.seed = this.hashCode(seed + '');
+        }
+
+        Random.prototype.hashCode = function(str) {
+            var hash = 0;
+
+            if (str.length == 0) return hash;
+
+            for (i = 0; i < str.length; i++) {
+                char = str.charCodeAt(i);
+                hash = hash * 31 + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+
+            return hash;
+        }
+
+        /**
+         * 生成 0 到 1 千万之间的随机整数
+         *
+         * @return {Integer} 返回一个随机整数
+         */
+        Random.prototype.nextInt = function() {
+            this.seed = (this.seed * 9301 + 49297) % 233280;
+            var t = this.seed / 233280.0;
+
+            return Math.abs(Math.ceil(t * 10000000));
+        }
+
+        /*******************************************************************************
+         *                                 Test random                                 *
+         ******************************************************************************/
+        // 测试生成随机数
+        var random = new Random(103); // 使用学号作为种子创建随机数对象
+
+        for (var i = 0; i < 100; ++i) {
+            console.log(i + ': ' + random.nextInt() % 80);
+        }
+
+        // 测试生成的随机数分布是否均衡：结果还是比较均衡的
+        var max = 10;
+        var frequence = {};
+        for (var i = 0; i < max; ++i) {
+            frequence['' + i] = 0;
+        }
+        for (var i = 0; i < 10000; ++i) {
+            var r = random.nextInt() % max;
+            frequence['' + r] = frequence['' + r] + 1;
+        }
+        console.log(frequence);
+    </script>
+</body>
+
+</html>

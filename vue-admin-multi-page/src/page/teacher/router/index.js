@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-// import NotFound from '@/view/404';
+// import _404  from '@/view/404';
 // import Home  from '@/view/Home';
 // import Users from '@/view/information/Users';
 // import Hello from '@/view/information/Hello';
 
-const NotFound  = resolve => require(['@/view/404'], resolve);
-const Home   = resolve => require(['@/view/Home'], resolve);
-const Users  = resolve => require(['@/view/information/Users'], resolve);
-const Hello  = resolve => require(['@/view/information/Hello'], resolve);
+const _404  = resolve => require(['@/page/teacher/view/404'], resolve);
+const Home  = resolve => require(['@/page/teacher/view/Home'], resolve);
+const Users = resolve => require(['@/page/teacher/view/information/Users'], resolve);
+const Hello = resolve => require(['@/page/teacher/view/information/Hello'], resolve);
 
 Vue.use(Router);
 
@@ -24,7 +24,7 @@ export default new Router({
         ]
     }, {
         path: '/404',
-        component: NotFound,
+        component: _404,
         hidden: true
     }, {
         path: '*',
