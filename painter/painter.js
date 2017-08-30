@@ -4,6 +4,17 @@
 function Shape() {
 }
 
+// 图形的类型
+Shape.types = {
+    line: 'line',
+    rect: 'rect',
+    curve: 'curve',
+    circle: 'circle',
+    ellipse: 'ellipse',
+    polyline: 'polyline',
+    eraser: 'eraser'
+};
+
 /**
  * 计算 points 围成的包围矩形:
  *     左上角的 x 为所有坐标中最小的 x
@@ -67,6 +78,11 @@ function Line(x1, y1, x2, y2) {
     this.id = 0;
     this.z = 0;
 }
+
+// 返回类型的名字
+Line.prototype.type = function() {
+    return Shape.types.line;
+};
 
 /**
  * 绘制线段
@@ -145,6 +161,11 @@ function Polyline(x, y, id) {
     this.z = 0;
 }
 
+// 返回类型的名字
+Polyline.prototype.type = function() {
+    return Shape.types.polyline;
+};
+
 Polyline.prototype.draw = function(context) {
     var ps = this.points;
     context.beginPath();
@@ -209,6 +230,11 @@ function Rect(x, y, w, h, id) {
     this.normalize();
 }
 
+// 返回类型的名字
+Rect.prototype.type = function() {
+    return Shape.types.rect;
+};
+
 Rect.prototype.draw = function(context) {
     context.beginPath();
     context.rect(this.x, this.y, this.w, this.h);
@@ -258,6 +284,11 @@ function Curve(x, y, id) {
     this.z = 0;
 }
 
+// 返回类型的名字
+Curve.prototype.type = function() {
+    return Shape.types.curve;
+};
+
 Curve.prototype.draw = function(context) {
     var ps = this.points;
 
@@ -303,6 +334,11 @@ function Circle(cx, cy, radius, id) {
     this.z = 0;
 }
 
+// 返回类型的名字
+Circle.prototype.type = function() {
+    return Shape.types.cirvle;
+};
+
 Circle.prototype.draw = function(context) {
     context.beginPath();
     context.arc(this.cx, this.cy, this.radius, 0, Math.PI * 2);
@@ -345,6 +381,11 @@ function Ellipse(cx, cy, a, b, id) {
     this.id = 0;
     this.z = 0;
 }
+
+// 返回类型的名字
+Ellipse.prototype.type = function() {
+    return Shape.types.ellipse;
+};
 
 Ellipse.prototype.draw = function(context) {
     var centerX = this.cx;
@@ -409,6 +450,11 @@ function Eraser(x, y) {
     this.id = 0;
     this.z = 0;
 }
+
+// 返回类型的名字
+Eraser.prototype.type = function() {
+    return Shape.types.eraser;
+};
 
 /**
  * 绘制橡皮擦，也即是使用 clearRect 从 context 中擦出橡皮擦移动过的地方。
@@ -544,7 +590,14 @@ Painter.prototype.init = function() {
     var self = this;
     self.$canvas.off(); // 先解绑所有事件，否则同一个 canvas 多次用来创建 painter 的时候就会重复绑定事件
 
-    self.$painter.find('.toolbar img').off().on('click', function() {
+    self.$painter.find('.toolbar li').off().on('click', function() {
+        if (self.isDrawingPolyline()) {
+            var x = self.shapeAsDrawing.virtualEndPoint.x;
+            var y = self.shapeAsDrawing.virtualEndPoint.y;
+            self.shapeAsDrawing.addPoint(x, y);
+        }
+        self.finishDrawingNewShape(); // 点击时结束正在绘制的图形
+
         var type = $(this).attr('data-type');
 
         if ('clear' === type) {
@@ -677,9 +730,19 @@ Painter.prototype.init = function() {
         self.update();
     });
 
+    // 双击时如果是折线，则结束绘制
+	self.$canvas.on('dblclick', function(e) {
+        if (self.isDrawingPolyline()) {
+            self.finishDrawingNewShape();
+            self.update();
+        }
+    });
+
     // 鼠标移除画布时，不显示橡皮擦，否则在边缘处会显示部分橡皮擦。
     self.$canvas.on('mouseleave', function(e) {
         self.showEraser = false;
+        // self.shapeAsDrawing = null;
+
         self.update();
     });
 
@@ -688,7 +751,9 @@ Painter.prototype.init = function() {
         e.preventDefault(); // 禁止弹出邮件菜单
 
         if (self.isDrawingPolyline()) {
-            self.shapeAsDrawing.finish();
+            var x = e.offsetX;
+            var y = e.offsetY;
+            self.shapeAsDrawing.addPoint(x, y);
             self.finishDrawingNewShape();
             self.update();
         } else if (self.actionType == ActionTypes.move) {
@@ -708,6 +773,14 @@ Painter.prototype.init = function() {
  * @return 无返回值
  */
 Painter.prototype.finishDrawingNewShape = function() {
+    if (this.shapeAsDrawing === null) {
+        return;
+    }
+
+    if (this.isDrawingPolyline()) {
+        this.shapeAsDrawing.finish();
+    }
+
     this.undoStack.push({name: 'remove', index: this.shapes.length, shape: this.shapeAsDrawing});
     this.redoStack.length = 0; // 新添加图形后就不能 redo 了
     this.shapes.push(this.shapeAsDrawing);
@@ -812,13 +885,12 @@ Painter.prototype.reorderShapes = function() {
 Painter.prototype.changeShape = function(type, elem) {
     // 如果正在绘制折线，结束绘制
     if (this.isDrawingPolyline()) {
-        this.shapeAsDrawing.finish();
         this.finishDrawingNewShape();
         this.update();
     }
 
     $(elem).addClass('active');
-    $(elem).siblings('img').removeClass('active');
+    $(elem).siblings().removeClass('active');
 
     this.actionType = type; // 当前绘制图形的类型
     this.showEraser = false; // 切换绘制的图形后，不在显示橡皮擦
@@ -835,12 +907,17 @@ Painter.prototype.changeShape = function(type, elem) {
  * @return 无返回值
  */
 Painter.prototype.update = function() {
+    // 1. 清除 canvas: 绘制白色背景
+    this.context.fillStyle = '#FFF';
+    this.context.beginPath();
+    this.context.rect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fill();
+    this.context.closePath();
+    // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     this.context.fillStyle = '#000';
     this.context.strokeStyle = this.strokeStyle;
     this.context.lineWidth = this.lineWidth;
-
-    // 1. 清除 canvas
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // 2. 绘制 shapes 数组中的所有图形，不包含正在创建的图形
     for (var i = 0; i < this.shapes.length; ++i) {
@@ -888,7 +965,7 @@ Painter.prototype.drawPoint = function(x, y) {
  * @return {Boolean} 返回 true 如果正在绘制折线，否则返回 false
  */
 Painter.prototype.isDrawingPolyline = function() {
-    return (this.actionType === ActionTypes.polyline) && this.shapeAsDrawing && !this.shapeAsDrawing.isFinished();
+    return this.shapeAsDrawing && this.shapeAsDrawing.type() === Shape.types.polyline && !this.shapeAsDrawing.isFinished();
 };
 
 /**
@@ -1015,9 +1092,76 @@ Painter.prototype.getImageDataUrl = function() {
     return this.canvas.toDataURL();
 };
 
+/**
+ * 获取绘制的图片数据，去掉图片四周白色部分
+ *
+ * @param padding 默认值为 5
+ * @return {String} Base64 编码后的图片数据
+ */
+Painter.prototype.getEffectiveImageDataUrl = function(padding) {
+    var bounding = Painter.imageBoundingRect(this.canvas, padding);
+    var imageData = this.context.getImageData(bounding.x, bounding.y, bounding.w, bounding.h);
+    var tempCanvas = $('<canvas id="temp-canvas" width="' + bounding.w +'" height="' + bounding.h + '"></canvas>').get(0);
+    var tempContext = tempCanvas.getContext('2d');
+    tempContext.putImageData(imageData, 0, 0);
+
+    return tempCanvas.toDataURL();
+};
+
 Painter.prototype.setShapes = function(shapes) {
     this.shapes = shapes;
     this.undoStack.length = 0;
     this.redoStack.length = 0;
     this.update();
+};
+
+/**
+ * 有效图片的 bounding rect
+ * @param  {Object} canvas canvas element
+ * @return {Json}   返回表示 bounding rect 的 Json 对象，其有 4 个属性，为 x, y, w, h
+ */
+Painter.imageBoundingRect = function(canvas, padding) {
+    var context = canvas.getContext('2d');
+    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    var d = imageData.data; // d 是一个 rgba 的整数数组
+    var w = imageData.width;
+    var h = imageData.height;
+
+    var bounding = {
+        minX: 100000,
+        minY: 100000,
+        maxX: 0,
+        maxY: 0
+    };
+
+    // 每一行有 w*4 个整数表示的像素颜色分量
+    for (var x = 0; x < w; x++) {
+        for (var y = 0; y < h; y++) {
+            var r = d[y*w*4 + x*4 + 0];
+            var g = d[y*w*4 + x*4 + 1];
+            var b = d[y*w*4 + x*4 + 2];
+
+            // 找到非白色像素的最小，最大坐标
+            if (r !== 255 || g !== 255 || b !== 255) {
+                bounding.minX = x < bounding.minX ? x : bounding.minX;
+                bounding.maxX = x > bounding.maxX ? x : bounding.maxX;
+                bounding.minY = y < bounding.minY ? y : bounding.minY;
+                bounding.maxY = y > bounding.maxY ? y : bounding.maxY;
+            }
+        }
+    }
+
+    // 加上 padding
+    var p = padding || 5;
+    bounding.minX = Math.max(bounding.minX - p, 0);
+    bounding.minY = Math.max(bounding.minY - p, 0);
+    bounding.maxX = Math.min(bounding.maxX + p, w);
+    bounding.maxY = Math.min(bounding.maxY + p, h);
+
+    return {
+        x: bounding.minX,
+        y: bounding.minY,
+        w: bounding.maxX - bounding.minX,
+        h: bounding.maxY - bounding.minY
+    };
 };

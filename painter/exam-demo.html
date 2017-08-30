@@ -19,7 +19,7 @@
 
         #painter {
             display: none;
-            padding: 15px;
+            padding: 1px 15px 15px 15px;
         }
 
         body .layui-layer-btn {
@@ -37,20 +37,19 @@
     <!-- 2. 定义画图板的 html -->
     <div id="painter">
         <!-- 绘图的工具栏 -->
-        <div class="toolbar">
-            <img src="img/move.png"     data-type="move"  title="移动">
-            <img src="img/curve.png"    data-type="curve" title="曲线">
-            <img src="img/line.png"     data-type="line"  title="线段">
-            <img src="img/polyline.png" data-type="polyline" title="折线">
-            <img src="img/rect.png"     data-type="rect"     title="矩形">
-            <img src="img/circle.png"   data-type="circle"   title="圆">
-            <img src="img/ellipse.png"  data-type="ellipse"  title="椭圆">
-            <img src="img/eraser.png"   data-type="eraser"   title="橡皮擦">
-
-            <img src="img/clear.png" data-type="clear" title="清空画布">
-            <img src="img/undo.png"  data-type="undo" title="后退一步">
-            <img src="img/redo.png"  data-type="redo" title="撤销后退">
-        </div>
+        <ul class="toolbar">
+            <li data-type="move"><img src="img/move.png"><div>移动|删除</div></li>
+            <li data-type="curve"><img src="img/curve.png"><div>曲线</div></li>
+            <li data-type="line"><img src="img/line.png"><div>线段</div></li>
+            <li data-type="polyline"><img src="img/polyline.png"><div>折线</div></li>
+            <li data-type="rect"><img src="img/rect.png"><div>矩形</div></li>
+            <li data-type="circle"><img src="img/circle.png"><div>圆</div></li>
+            <li data-type="ellipse"><img src="img/ellipse.png"><div>椭圆</div></li>
+            <li data-type="eraser"><img src="img/eraser.png"><div>橡皮擦</div></li>
+            <li data-type="clear"><img src="img/clear.png"><div>清空画布</div></li>
+            <li data-type="undo"><img src="img/undo.png"><div>后退</div></li>
+            <li data-type="redo"><img src="img/redo.png"><div>恢复</div></li>
+        </ul>
 
         <!-- 画布 -->
         <canvas class="canvas" width="700" height="400"></canvas>

@@ -9,7 +9,8 @@ import Router from 'vue-router';
 const _404  = resolve => require(['@/page/student/view/404'], resolve);
 const Home  = resolve => require(['@/page/student/view/Home'], resolve);
 const Users = resolve => require(['@/page/student/view/information/Users'], resolve);
-const Hello = resolve => require(['@/page/student/view/information/Hello'], resolve);
+// const Hello = resolve => require(['@/page/student/view/information/Hello'], resolve);
+const Hello = () => import('@/page/student/view/information/Hello'); // 新写法
 
 Vue.use(Router);
 

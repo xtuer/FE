@@ -5,6 +5,23 @@
 #painter .canvas {
     border: 1px solid #BBB;
     border-radius: 4px;
+    clear: both;
+    display: block;
+}
+
+#painter .toolbar {
+    list-style: none;
+    clear: both;
+    display: block;
+    padding: 0;
+}
+
+#painter .toolbar li {
+    float: left;
+    text-align: center;
+    margin: 2px 2px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0);
 }
 
 #painter .toolbar img {
@@ -14,11 +31,11 @@
     border: 1px solid transparent;
 }
 
-#painter .toolbar img:hover {
+#painter .toolbar li:hover {
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-#painter .toolbar img.active {
+#painter .toolbar li.active {
     border: 1px solid rgba(0, 0, 0, 0.2);
     background: rgba(0, 0, 0, 0.1);
 }
@@ -43,4 +60,14 @@
 
 #painter ul.menu li:hover {
     background: #AAA;
+}
+
+#painter .toolbar, #painter .toolbar img {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
