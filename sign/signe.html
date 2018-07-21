@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+        #painter .canvas, img {
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 签名的地方 -->
+    <div id="painter">
+        <canvas class="canvas" width="600" height="400">浏览器不支持 Canvas，请升级浏览器</canvas>
+    </div>
+
+    <br>
+    <button id="sign">获取签名</button>
+    <button id="resign">重新签名</button>
+
+    <!-- 测试签名的图片 -->
+    <br>
+    <img src="" alt="">
+
+    <script src='http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js'></script>
+    <script src="signe.js" charset="utf-8"></script>
+    <script>
+        // 创建画图板
+        var painter = new Painter($('#painter'));
+
+        $('#sign').click(function(event) {
+            var imageBase64Src = painter.getEffectiveImageDataUrl();
+
+            if (painter.validSign) {
+                $('img').attr('src', imageBase64Src);
+            } else {
+                alert('签名无效');
+            }
+        });
+
+        $('#resign').click(function(event) {
+            painter.clean();
+        });
+    </script>
+</body>
+
+</html>

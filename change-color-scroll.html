@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style media="screen">
+        body{background:#10e88a; color:#fff; font-family: 'Roboto', sans-serif; margin:0; transition:all 400ms; will-change:background;}
+
+        article{display:block; width:100%; text-align:right; height:100vh; margin:6em 0 0 0; overflow: hidden}
+
+        h1{font-size:15em; font-weight:900; margin:0 0.1em; }
+        p{width:50%; float:right; font-size:1.1em; margin:0 2em;}
+        .clear{clear:both;}
+    </style>
+</head>
+<body>
+    <article id="one" data-color="#10e88a"><h1>Lorem</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat pretium odio ac vulputate. Nullam vitae diam id erat interdum dignissim. Nam eget faucibus metus. Pellentesque vitae nibh non mi ultrices rhoncus. Aliquam vestibulum ut massa vitae congue. Aliquam mauris neque, eleifend sit amet elit ut, placerat iaculis velit. Suspendisse potenti. Cras interdum interdum porttitor. Aenean ac enim vitae metus fringilla malesuada. Duis pharetra enim nulla, non eleifend ante lobortis ac. Duis quis purus lorem. Sed mattis massa ac nisl faucibus sagittis. Ut posuere velit massa, et malesuada elit condimentum ut. Integer lacinia risus ut ante cursus, sed porttitor nisl suscipit. Aliquam non ultricies massa. Donec vehicula sem at nisl lacinia ultrices.</p> <div class="clear"></div></article>
+<article id="two" data-color="#7f3995"><h1>Ipsum</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat pretium odio ac vulputate. Nullam vitae diam id erat interdum dignissim. Nam eget faucibus metus. Pellentesque vitae nibh non mi ultrices rhoncus. Aliquam vestibulum ut massa vitae congue. Aliquam mauris neque, eleifend sit amet elit ut, placerat iaculis velit. Suspendisse potenti. Cras interdum interdum porttitor. Aenean ac enim vitae metus fringilla malesuada. Duis pharetra enim nulla, non eleifend ante lobortis ac. Duis quis purus lorem. Sed mattis massa ac nisl faucibus sagittis. Ut posuere velit massa, et malesuada elit condimentum ut. Integer lacinia risus ut ante cursus, sed porttitor nisl suscipit. Aliquam non ultricies massa. Donec vehicula sem at nisl lacinia ultrices.</p> <div class="clear"></div> </article>
+<article id="three" data-color="#0d78e7"><h1>Dolor</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat pretium odio ac vulputate. Nullam vitae diam id erat interdum dignissim. Nam eget faucibus metus. Pellentesque vitae nibh non mi ultrices rhoncus. Aliquam vestibulum ut massa vitae congue. Aliquam mauris neque, eleifend sit amet elit ut, placerat iaculis velit. Suspendisse potenti. Cras interdum interdum porttitor. Aenean ac enim vitae metus fringilla malesuada. Duis pharetra enim nulla, non eleifend ante lobortis ac. Duis quis purus lorem. Sed mattis massa ac nisl faucibus sagittis. Ut posuere velit massa, et malesuada elit condimentum ut. Integer lacinia risus ut ante cursus, sed porttitor nisl suscipit. Aliquam non ultricies massa. Donec vehicula sem at nisl lacinia ultrices.</p> <div class="clear"></div> </article>
+<article id="four" data-color="#f88f18"><h1>Sit</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat pretium odio ac vulputate. Nullam vitae diam id erat interdum dignissim. Nam eget faucibus metus. Pellentesque vitae nibh non mi ultrices rhoncus. Aliquam vestibulum ut massa vitae congue. Aliquam mauris neque, eleifend sit amet elit ut, placerat iaculis velit. Suspendisse potenti. Cras interdum interdum porttitor. Aenean ac enim vitae metus fringilla malesuada. Duis pharetra enim nulla, non eleifend ante lobortis ac. Duis quis purus lorem. Sed mattis massa ac nisl faucibus sagittis. Ut posuere velit massa, et malesuada elit condimentum ut. Integer lacinia risus ut ante cursus, sed porttitor nisl suscipit. Aliquam non ultricies massa. Donec vehicula sem at nisl lacinia ultrices.</p> <div class="clear"></div> </article>
+<article id="five" data-color="#E91E63"><h1>Amet</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consequat pretium odio ac vulputate. Nullam vitae diam id erat interdum dignissim. Nam eget faucibus metus. Pellentesque vitae nibh non mi ultrices rhoncus. Aliquam vestibulum ut massa vitae congue. Aliquam mauris neque, eleifend sit amet elit ut, placerat iaculis velit. Suspendisse potenti. Cras interdum interdum porttitor. Aenean ac enim vitae metus fringilla malesuada. Duis pharetra enim nulla, non eleifend ante lobortis ac. Duis quis purus lorem. Sed mattis massa ac nisl faucibus sagittis. Ut posuere velit massa, et malesuada elit condimentum ut. Integer lacinia risus ut ante cursus, sed porttitor nisl suscipit. Aliquam non ultricies massa. Donec vehicula sem at nisl lacinia ultrices.</p> <div class="clear"></div> </article>
+
+    <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var one = "#10e88a",
+        two = "#7f3995",
+        three = "#0d78e7",
+        four = "#f88f18",
+        five = "#bb6774";
+
+        $(window).on("scroll touchmove", function() {
+            if ($(document).scrollTop() >= $("#five").position().top) {
+                $('body').css('background', $("#five").attr("data-color"))
+            } else if ($(document).scrollTop() > $("#four").position().top) {
+                $('body').css('background', $("#four").attr("data-color"))
+            } else if ($(document).scrollTop() > $("#three").position().top) {
+                $('body').css('background', $("#three").attr("data-color"))
+            } else if ($(document).scrollTop() > $("#two").position().top) {
+                $('body').css('background', $("#two").attr("data-color"))
+            } else if ($(document).scrollTop() >= $("#one").position().top) {
+                $('body').css('background', $("#one").attr("data-color"));
+            }
+        });
+// jackHarnerSig("light")
+    </script>
+</body>
+</html>
